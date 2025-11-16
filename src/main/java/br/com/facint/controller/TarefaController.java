@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class TarefaController {
@@ -14,8 +15,13 @@ public class TarefaController {
     private TarefaRepository repositorio;
 
     @GetMapping("/tarefa")
-    public List<Tarefa> todasTarefas() {
-        return repositorio.findAll();
+    public List<Tarefa> todasTarefas(@RequestParam Map<String, String> parametros) {
+        if (parametros.isEmpty()) {
+            return repositorio.findAll();
+        } else {
+            String descricao = parametros.get("descricao");
+            return repositorio.findByDescricaoLike("%" + descricao + "%");
+        }
     }
 
     @GetMapping("/tarefa/{id}")
