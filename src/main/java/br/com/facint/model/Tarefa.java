@@ -4,6 +4,9 @@ import java.security.PrivateKey;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tarefas")
@@ -13,13 +16,16 @@ public class Tarefa {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Integer id;
-	
+
+    @NotBlank(message = "{tarefa.descricao.not-blank}")//validação por campo
+    @Size(min = 5, max = 150, message = "{tarefa.descricao.size}") //quantidade permitida do campo
 	@Column(name = "ds_tarefa", nullable = false, length = 150)
 	private String descricao;
 	
 	@Enumerated(EnumType.STRING)
 	private TarefaStatus status;
-	
+
+    @FutureOrPresent(message = "{tarefa.descricao.future-or-present}")// data precisa ser presente ou futura
 	private LocalDate dataEntrega;
 	
 	private boolean visivel;

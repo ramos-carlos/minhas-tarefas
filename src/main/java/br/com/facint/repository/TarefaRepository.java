@@ -23,7 +23,4 @@ public interface TarefaRepository extends JpaRepository<Tarefa, Integer> {
 
     public List<Tarefa> tarefasPorCategoria(String nomeCategoria);
 
-
-
-
 }

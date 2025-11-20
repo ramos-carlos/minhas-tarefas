@@ -1,7 +1,8 @@
 package br.com.facint.controller;
 
 import br.com.facint.model.Tarefa;
-import br.com.facint.repository.TarefaRepository;
+import br.com.facint.services.TarefaService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,32 +13,30 @@ import java.util.Map;
 public class TarefaController {
 
     @Autowired
-    private TarefaRepository repositorio;
+    private TarefaService service;
 
     @GetMapping("/tarefa")
     public List<Tarefa> todasTarefas(@RequestParam Map<String, String> parametros) {
         if (parametros.isEmpty()) {
-            return repositorio.findAll();
+            return service.getTodasTarefas();
         } else {
             String descricao = parametros.get("descricao");
-            return repositorio.findByDescricaoLike("%" + descricao + "%");
+            return service.getTarefasPorDescricao(descricao);
         }
     }
 
     @GetMapping("/tarefa/{id}")
     public Tarefa umaTarefa(@PathVariable Integer id) {
-        return repositorio.findById(id).orElse(null);
+        return service.getTarefaPorId(id);
     }
 
     @PostMapping("/tarefa")
-    public Tarefa salvarTarefa(@RequestBody Tarefa salvar) {
-        return repositorio.save(salvar);
+    public Tarefa salvarTarefa(@Valid @RequestBody Tarefa tarefa) {
+        return service.salvarTarefa(tarefa);
     }
 
     @DeleteMapping("/tarefa/{id}")
     public void excluirTarefa(@PathVariable Integer id) {
-        repositorio.deleteById(id);
+        service.deleteById(id);
     }
-
-
 }
