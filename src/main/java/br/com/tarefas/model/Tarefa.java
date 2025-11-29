@@ -21,8 +21,8 @@ public class Tarefa {
     @Column(name = "ds_tarefa", nullable = false, length = 150)
     private String descricao;
 
-    @Enumerated(EnumType.STRING)
     //enum
+    @Enumerated(EnumType.STRING)
     private TarefaStatus status;
 
     private LocalDate dataEntrega;
