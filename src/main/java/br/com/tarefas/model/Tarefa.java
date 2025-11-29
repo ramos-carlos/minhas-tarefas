@@ -1,14 +1,32 @@
 package br.com.tarefas.model;
 
+import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
+//transformando classe em entidade
+@Entity
+//alterar propriedades da tabela
+@Table(name = "tarefas")
 public class Tarefa {
 
+    //entidade Jpa precisa ter um id
+    @Id
+    //forma de geração do id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Integer id;
+
     //atributos
+    //alterando propriedades das colunas
+    @Column(name = "ds_tarefa", nullable = false, length = 150)
     private String descricao;
+
+    @Enumerated(EnumType.STRING)
     //enum
     private TarefaStatus status;
+
     private LocalDate dataEntrega;
+
     private boolean visivel;
 
     //associação com TarefaCategoria
@@ -64,5 +82,13 @@ public class Tarefa {
 
     public void setUsuario(Usuario usuario) {
         this.usuario = usuario;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 }
