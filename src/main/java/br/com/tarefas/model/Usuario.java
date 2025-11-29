@@ -2,6 +2,10 @@ package br.com.tarefas.model;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 //transformando classe em entidade
 @Entity
 @Table(name = "usuarios")
@@ -16,6 +20,15 @@ public class Usuario {
     private String nome;
 
     private String senha;
+
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private List<Tarefa> tarefas;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "usuarios_roles",
+            joinColumns = @JoinColumn(name = "usuario_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     //métodos assessores, getters e setters
     public String getNome() {
@@ -40,5 +53,9 @@ public class Usuario {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public List<Tarefa> getTarefas() {
+        return tarefas;
     }
 }

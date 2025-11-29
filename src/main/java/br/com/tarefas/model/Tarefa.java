@@ -29,10 +29,16 @@ public class Tarefa {
 
     private boolean visivel;
 
-    //associação com TarefaCategoria
+    //associação com TarefaCategoria/relacionando com entidade
+    @ManyToOne
+    //adicionando configurações
+    @JoinColumn(nullable = false)
     private TarefaCategoria categoria;
 
-    //associação com Usuário
+    //associação com Usuário/relacionando com entidade
+    @ManyToOne
+    //adicionando configurações
+    @JoinColumn(nullable = false)
     private Usuario usuario;
 
     //métodos assessores, getters e setters
