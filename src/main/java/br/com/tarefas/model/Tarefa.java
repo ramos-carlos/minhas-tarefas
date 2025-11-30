@@ -22,9 +22,9 @@ public class Tarefa {
     private Integer id;
 
     //indica que o campo não pode estar vazio
-    @NotBlank(message = "Campo descrição não pode estar vazio")
+    @NotBlank(message = "{tarefa.descricao.not-black}")
     //quantidade permitida para esse campo
-    @Size(min = 5, max = 150, message = "Campo descrição deve ter entre 5 e 150 caracteres")
+    @Size(min = 5, max = 150, message = "{tarefa.descricao.size}")
     //atributos
     //alterando propriedades das colunas
     @Column(name = "ds_tarefa", nullable = false, length = 150)
@@ -35,7 +35,7 @@ public class Tarefa {
     private TarefaStatus status;
 
     //data presente ou futura
-    @FutureOrPresent(message = "Campo Data de entrega deve ser uma data futura")
+    @FutureOrPresent(message = "{tarefa.descricao.future-or-present}")
     private LocalDate dataEntrega;
 
     private boolean visivel;
