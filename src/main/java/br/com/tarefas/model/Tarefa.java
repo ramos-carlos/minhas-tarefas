@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Entity
 //alterar propriedades da tabela
 @Table(name = "tarefas")
+@NamedQuery(name = "Tarefa.tarefasPorCategoria", query = "select t from Tarefa t inner join t.categoria c where c.nome = ?1")
 public class Tarefa {
 
     //entidade Jpa precisa ter um id
