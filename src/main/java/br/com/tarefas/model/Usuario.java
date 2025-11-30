@@ -1,5 +1,6 @@
 package br.com.tarefas.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -21,6 +22,7 @@ public class Usuario {
 
     private String senha;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "usuario", fetch = FetchType.LAZY)
     private List<Tarefa> tarefas;
 

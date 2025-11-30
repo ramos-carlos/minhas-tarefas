@@ -54,6 +54,16 @@ public class CarregaBaseDeDados {
             tarefa.setUsuario(usuario);
             //salvar o registro no banco de dados
             tarefaRepository.save(tarefa);
+
+            Tarefa tarefa2 = new Tarefa();
+            tarefa2.setDescricao("Spring Data JPA");
+            tarefa2.setDataEntrega(LocalDate.now().plusDays(1));
+            tarefa2.setStatus(TarefaStatus.ABERTO);
+            tarefa2.setVisivel(true);
+            tarefa2.setCategoria(categoria);
+            tarefa2.setUsuario(usuario);
+            //salvar o registro no banco de dados
+            tarefaRepository.save(tarefa2);
         };
     }
 }
