@@ -2,6 +2,7 @@ package br.com.tarefas.controller;
 
 import br.com.tarefas.model.Tarefa;
 import br.com.tarefas.repository.TarefaRepository;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,13 +29,13 @@ public class TarefaController {
 
     //metodo para recuperar uma tarefa especifica
     @GetMapping("/tarefa/{id}")
-    public Tarefa umaTarefa(@PathVariable Integer id) { //para recuperar o id
+    public Tarefa umaTarefa(@PathVariable Integer id) {//para recuperar o id
         return repositorio.findById(id).orElse(null);
     }
 
     //metodo salvar uma tarefa
     @PostMapping("/tarefa")
-    public Tarefa salvarTarefa(@RequestBody Tarefa tarefa) {
+    public Tarefa salvarTarefa(@Valid @RequestBody Tarefa tarefa) {
         return repositorio.save(tarefa);
     }
 
@@ -43,9 +44,4 @@ public class TarefaController {
     public void excluirTarefa(@PathVariable Integer id) { //para recuperar o id
         repositorio.deleteById(id);
     }
-
-
-
-
-
 }

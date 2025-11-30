@@ -1,6 +1,10 @@
 package br.com.tarefas.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.FutureOrPresent;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 import java.time.LocalDate;
 
@@ -17,6 +21,10 @@ public class Tarefa {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    //indica que o campo não pode estar vazio
+    @NotBlank(message = "Campo descrição não pode estar vazio")
+    //quantidade permitida para esse campo
+    @Size(min = 5, max = 150, message = "Campo descrição deve ter entre 5 e 150 caracteres")
     //atributos
     //alterando propriedades das colunas
     @Column(name = "ds_tarefa", nullable = false, length = 150)
@@ -26,6 +34,8 @@ public class Tarefa {
     @Enumerated(EnumType.STRING)
     private TarefaStatus status;
 
+    //data presente ou futura
+    @FutureOrPresent(message = "Campo Data de entrega deve ser uma data futura")
     private LocalDate dataEntrega;
 
     private boolean visivel;

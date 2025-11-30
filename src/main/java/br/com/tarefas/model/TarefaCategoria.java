@@ -1,6 +1,8 @@
 package br.com.tarefas.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 //transformando classe em entidade
 @Entity
@@ -14,6 +16,10 @@ public class TarefaCategoria {
     private Integer id;
 
     //atributos
+
+    @NotBlank(message = "Campo nome não pode estar vazio")
+    @Size(min = 5, max = 50, message = "Campo nome deve ter entre 5 e 50 letras")
+    @Column(length = 50)
     private String nome;
 
     //métodos assessores, getters e setters
