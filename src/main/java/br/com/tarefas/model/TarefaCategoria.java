@@ -17,7 +17,7 @@ public class TarefaCategoria {
 
     //atributos
 
-    @NotBlank(message = "Campo nome não pode estar vazio")
+    @NotBlank(message = "{tarefa.descricao.not-blank}")
     @Size(min = 5, max = 50, message = "Campo nome deve ter entre 5 e 50 letras")
     @Column(length = 50)
     private String nome;

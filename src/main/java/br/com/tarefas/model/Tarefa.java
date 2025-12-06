@@ -22,7 +22,7 @@ public class Tarefa {
     private Integer id;
 
     //indica que o campo não pode estar vazio
-    @NotBlank(message = "{tarefa.descricao.not-black}")
+    @NotBlank(message = "{tarefa.descricao.not-blank}")
     //quantidade permitida para esse campo
     @Size(min = 5, max = 150, message = "{tarefa.descricao.size}")
     //atributos
