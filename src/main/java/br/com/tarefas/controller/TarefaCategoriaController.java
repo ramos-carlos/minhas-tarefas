@@ -1,13 +1,18 @@
 package br.com.tarefas.controller;
 
+import br.com.tarefas.controller.assembler.TarefaCategoriaAssembler;
+import br.com.tarefas.controller.request.TarefaCategoriaRequest;
+import br.com.tarefas.controller.response.TarefaCategoriaResponse;
 import br.com.tarefas.model.TarefaCategoria;
-import br.com.tarefas.repository.TarefaCategoriaRepository;
-import jakarta.validation.Valid;
+import br.com.tarefas.services.TarefaCategoriaService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 //responsável em lidar com requisições do servidor
 @RestController
@@ -15,33 +20,49 @@ public class TarefaCategoriaController {
 
     //injetando TarefaCategoriaRepository
     @Autowired
-    private TarefaCategoriaRepository repositorio;
+    //private TarefaCategoriaRepository repositorio;
+    private TarefaCategoriaService service;
+
+    @Autowired
+    private ModelMapper mapper;
+
+    @Autowired
+    private TarefaCategoriaAssembler assembler;
 
     //métodos de operação de crud básico
     @GetMapping("/categoria")//vai expor o metodo para um end-point
-    public List<TarefaCategoria> todasTarefaCategorias(@RequestParam Map<String, String> parametros) {
-        if (parametros.isEmpty())
-            return repositorio.findAll();
+    public CollectionModel<EntityModel<TarefaCategoriaResponse>> todasTarefaCategorias() {
 
-        String descricaoCategoria = parametros.get("descricaoCategoria");
-        return repositorio.findByNome(descricaoCategoria);
+        List<TarefaCategoria> categorias = service.getTodasCategorias();
+
+        List<EntityModel<TarefaCategoriaResponse>> categoriasModel = categorias
+                .stream()
+                .map(assembler::toModel)
+                .collect(Collectors.toList());
+
+        return CollectionModel.of(categoriasModel);
     }
+
 
     //metodo para recuperar uma tarefa especifica
     @GetMapping("/categoria/{id}")
-    public TarefaCategoria umaTarefaCategoria(@PathVariable Integer id) {//para recuperar o id
-        return repositorio.findById(id).orElse(null);
+    public EntityModel<TarefaCategoriaResponse> umaTarefaCategoria(@PathVariable Integer id) {//para recuperar o id
+
+        TarefaCategoria categoria = service.getCategoriaPorId(id);
+
+        return assembler.toModel(categoria);
     }
 
     //metodo salvar uma tarefa
     @PostMapping("/categoria")
-    public TarefaCategoria salvarCategoria(@Valid @RequestBody TarefaCategoria tarefaCategoria) {
-        return repositorio.save(tarefaCategoria);
+    public TarefaCategoriaResponse salvarCategoria(@RequestBody TarefaCategoriaRequest categoriaReq) {
+        TarefaCategoria categoria = mapper.map(categoriaReq, TarefaCategoria.class);
+        return mapper.map(service.salvar(categoria), TarefaCategoriaResponse.class);
     }
 
     //metodo de deletar uma tarefa
     @DeleteMapping("/categoria/{id}")
-    public void excluirCategoria(@PathVariable Integer id) {
-        repositorio.deleteById(id);
+    public void excluirTarefa(@PathVariable Integer id) {
+        service.deleteById(id);
     }
 }

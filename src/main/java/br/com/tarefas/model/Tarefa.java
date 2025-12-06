@@ -32,7 +32,7 @@ public class Tarefa {
 
     //enum
     @Enumerated(EnumType.STRING)
-    private TarefaStatus status;
+    private TarefaStatus status = TarefaStatus.ABERTO;
 
     //data presente ou futura
     @FutureOrPresent(message = "{tarefa.descricao.future-or-present}")
