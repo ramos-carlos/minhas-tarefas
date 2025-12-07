@@ -3,7 +3,7 @@ package br.com.tarefas.exception;
 public class TarefaStatusException extends RuntimeException {
 
     public TarefaStatusException() {
-        super();
+        super("Não é possivel cancelar uma tarefa concluída");
     }
 
     public TarefaStatusException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
