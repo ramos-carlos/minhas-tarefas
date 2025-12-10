@@ -30,6 +30,7 @@ public class Usuario {
     @JoinTable(name = "usuarios_roles",
             joinColumns = @JoinColumn(name = "usuario_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
+
     private Set<Role> roles = new HashSet<>();
 
     //métodos assessores, getters e setters
@@ -59,5 +60,13 @@ public class Usuario {
 
     public List<Tarefa> getTarefas() {
         return tarefas;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

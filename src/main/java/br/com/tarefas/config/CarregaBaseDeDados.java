@@ -1,9 +1,7 @@
 package br.com.tarefas.config;
 
-import br.com.tarefas.model.Tarefa;
-import br.com.tarefas.model.TarefaCategoria;
-import br.com.tarefas.model.TarefaStatus;
-import br.com.tarefas.model.Usuario;
+import br.com.tarefas.model.*;
+import br.com.tarefas.repository.RoleRepository;
 import br.com.tarefas.repository.TarefaCategoriaRepository;
 import br.com.tarefas.repository.TarefaRepository;
 import br.com.tarefas.repository.UsuarioRepository;
@@ -12,8 +10,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDate;
+import java.util.Set;
 
 //quando se trata de classe de configuração
 @Configuration
@@ -25,18 +26,31 @@ public class CarregaBaseDeDados {
     private UsuarioRepository usuarioRepository;
 
     @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
     private TarefaCategoriaRepository categoriaRepository;
 
     @Autowired
     private TarefaRepository tarefaRepository;
 
+    @Autowired
+    private PasswordEncoder encoder;
+
     //a aplicação executa quando o código tiver dentro desse metodo
     @Bean
     CommandLineRunner executar() {
         return args -> {
+
+            Role roleAdmin = new Role(ERole.ROLE_ADMIN);
+            roleAdmin = roleRepository.save(roleAdmin);
+
             Usuario usuario = new Usuario();
             usuario.setNome("Admin");
-            usuario.setSenha("123456");
+
+            usuario.setSenha(encoder.encode("123456"));
+            usuario.setRoles(Set.of(roleAdmin));
+
             //salvar o registro no banco de dados
             usuarioRepository.save(usuario);
 
