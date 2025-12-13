@@ -32,9 +32,17 @@ public class AuthTokenFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
+        String path = request.getServletPath();
+
+        // liberar login e h2-console
+        if (path.startsWith("/api/auth") || path.startsWith("/h2-console")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         String jwt = parseJwt(request);
 
-        if (jwt != null & jwtUtils.validateJwtToken(jwt)) {
+        if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
             String username = jwtUtils.getUserNameFromJwtToken(jwt);
 
             UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(username);
@@ -43,13 +51,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
                     new UsernamePasswordAuthenticationToken(userDetails,
                     null, userDetails.getAuthorities());
 
-            authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+            authentication.setDetails(
+                    new WebAuthenticationDetailsSource().buildDetails(request));
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         filterChain.doFilter(request, response);
-
     }
 
     private String parseJwt(HttpServletRequest request) {

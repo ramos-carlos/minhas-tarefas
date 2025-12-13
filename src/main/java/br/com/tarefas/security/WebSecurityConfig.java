@@ -66,27 +66,22 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
+        http
+                .csrf(csrf -> csrf.disable())
                 .cors(cors -> {})
-                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .exceptionHandling(ex -> ex.authenticationEntryPoint(unauthorizedHandler))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(unauthorizedHandler)
+                )
+                .authenticationProvider(authenticationProvider()) // 🔥 ESSENCIAL
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
-
-                        .requestMatchers(HttpMethod.POST, PATHS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, PATHS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, PATHS).hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, PATHS).hasAnyRole("ADMIN", "USER")
-
                         .anyRequest().authenticated()
                 );
 
-        http.authenticationProvider(authenticationProvider());
-
-        http.addFilterBefore(authenticationJwtTokenFilter(), UsernamePasswordAuthenticationFilter.class);
-
-        // Para liberar frames do H2 Console
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();

@@ -73,6 +73,9 @@ public class UsuarioService {
 
     public JwtResponse autenticaUsuario (String nome, String senha) {
 
+        System.out.println("Nome: " + nome);
+        System.out.println("Senha: " + senha);
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(nome, senha));
 
